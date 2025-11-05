@@ -1,0 +1,81 @@
+---
+layout: default
+title: Homework 5 – Bigfoot Visualization
+---
+
+<h1>Homework 5: Bigfoot Sightings Visualization</h1>
+
+<h2>Visualization 1: Bigfoot Sightings by State</h2>
+<div id="chart1"></div>
+
+<p>
+This bar chart visualizes the total number of reported Bigfoot sightings per U.S. state. 
+It provides an overview of which states have the highest frequency of reports.
+</p>
+
+<p>
+<strong>Encodings:</strong> The x-axis encodes <code>state</code> as a nominal variable, and the y-axis encodes the count of 
+records as a quantitative variable (<code>count():Q</code>). Each bar’s color is also mapped to <code>state</code> using a categorical colormap, 
+which helps visually separate each bar and prevents monotony.
+</p>
+
+<p>
+<strong>Color map:</strong> The default categorical color scheme provides high contrast and evenly distributed hues across states, 
+helping viewers distinguish between bars. Since the data represents discrete categories (states), a continuous colormap would 
+not be appropriate here.
+</p>
+
+<p>
+<strong>Transformations:</strong> I used Vega-Lite’s built-in aggregation <code>count()</code> instead of manually grouping in pandas, 
+allowing Altair to automatically compute total counts per state. This simple aggregation was enough because we only needed 
+state-level counts.
+</p>
+
+<hr>
+
+<h2>Visualization 2: Interactive Sightings per Year (Selected State)</h2>
+<div id="chart2"></div>
+
+<p>
+This plot shows how Bigfoot sightings in a specific state have changed over time. 
+A dropdown menu allows viewers to choose a state, making the visualization interactive and focused on a single region at a time.
+</p>
+
+<p>
+<strong>Encodings:</strong> The x-axis encodes <code>year</code> as a temporal variable, and the y-axis encodes <code>count():Q</code>. 
+The <code>color</code> channel maps each point to its <code>state</code> for clarity, and the <code>size</code> encoding is conditioned on the selected 
+state using <code>alt.condition(sel, alt.value(100), alt.value(20))</code>. This highlights the selected state visually.
+</p>
+
+<p>
+<strong>Color map:</strong> A categorical colormap is again used because each state is a distinct category. 
+When a single state is selected, its color remains consistent across all years, maintaining interpretability.
+</p>
+
+<p>
+<strong>Transformations:</strong> In the Python notebook, I extracted the year from the <code>date</code> column using pandas 
+(<code>df['year'] = df['date'].dt.year</code>) and grouped the data by state and year to prepare it for visualization.
+</p>
+
+<p>
+<strong>Interactivity:</strong> The dropdown selection parameter (<code>alt.selection_point</code>) lets the viewer choose a specific 
+state to highlight. This improves clarity and engagement, allowing exploration of year-by-year changes while filtering out noise 
+from other states.
+</p>
+
+<hr>
+
+<h3>Links</h3>
+<ul>
+  <li><a href="https://raw.githubusercontent.com/UIUC-iSchool-DataViz/is445_data/main/bfro_reports_fall2022.csv" target="_blank">The Data</a></li>
+  <li><a href="https://github.com/AdityaShaarma/AdityaShaarma.github.io/blob/main/python_notebooks/Workbook.ipynb" target="_blank">The Analysis (Notebook)</a></li>
+</ul>
+
+<script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
+<script>
+  vegaEmbed('#chart1', '{{ "assets/json/chart1.json" | relative_url }}');
+  vegaEmbed('#chart2', '{{ "assets/json/chart2.json" | relative_url }}');
+</script>
